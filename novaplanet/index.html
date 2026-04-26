@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova's Planet •STASH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+        
+        body {
+            font-family: "VT323", monospace;
+            background: #0a0a0a;
+            color: #00ff9f;
+            image-rendering: pixelated;
+        }
+        
+        .nav-glow {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid #ff00ff;
+            box-shadow: 0 0 20px #ff00ff;
+        }
+        
+        .neon-text {
+            text-shadow: 
+                0 0 5px #00ff9f,
+                0 0 10px #00ff9f,
+                0 0 20px #ff00ff,
+                0 0 40px #00ffff;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(45deg, #1a0033, #330033, #003333, #1a0033);
+            background-size: 400% 400%;
+            animation: psychGradient 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes psychGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-radial-gradient(
+                circle,
+                rgba(255,0,255,0.1) 0px,
+                transparent 40px
+            );
+            animation: psychSwirl 20s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes psychSwirl {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .psychedelic-placeholder {
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 300% 300%;
+            animation: psychFlow 3s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid #ffff00;
+            color: #000;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 2rem;
+            text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff;
+            box-shadow: inset 0 0 40px rgba(255,255,255,0.6);
+        }
+        
+        @keyframes psychFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .product-card {
+            background: #111;
+            border: 3px solid #00ffff;
+            transition: all 0.2s;
+        }
+        
+        .product-card:hover {
+            border-color: #ff00ff;
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 0 40px #ff00ff;
+        }
+        
+        .scanline {
+            position: relative;
+        }
+        
+        .scanline::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(255,255,255,0.08) 50%
+            );
+            background-size: 100% 6px;
+            pointer-events: none;
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+    </style>
+</head>
+<body class="bg-black text-[#00ff9f] min-h-screen">
+
+    <!-- 90s Neon Nav -->
+    <nav class="nav-glow sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-x-3 text-3xl tracking-widest neon-text">
+                NOVA'S <span class="text-[#ff00ff]">PLANET</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-x-10 text-lg">
+                <a href="#shop" onclick="navigateToSection('shop')" class="hover:text-[#ffff00] transition-colors">SHOP</a>
+                <a href="#stories" onclick="navigateToSection('stories')" class="hover:text-[#ffff00] transition-colors">STORIES</a>
+                <a href="#about" onclick="navigateToSection('about')" class="hover:text-[#ffff00] transition-colors">THE ARCHIVES</a>
+            </div>
+
+            <div class="flex items-center gap-x-6 text-2xl">
+                <button onclick="toggleSearch()" class="hover:text-[#ffff00] transition-colors">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button onclick="toggleCart()" class="hover:text-[#ffff00] transition-colors relative">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#ff00ff] text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-black">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="hero" class="hero-bg pt-20 pb-24 scanline">
+        <div class="max-w-screen-2xl mx-auto px-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="space-y-8">
+                <div class="inline-block border-4 border-[#ffff00] px-8 py-3 text-[#ffff00] text-2xl tracking-widest animate-pulse">
+                    EST 2026 • Nova 2026
+                </div>
+                
+                <h1 class="text-7xl md:text-8xl leading-none font-bold tracking-widest neon-text">
+                    CLOTHING FROM<br>
+                    ANOTHER DIMENSION...Sorta
+                </h1>
+                
+                <p class="text-3xl text-[#00ffff] max-w-md">
+                   90s & Y2K treasures •<br>
+                    From Our Hands To Yours
+                       <br> Orders above $50 FREE SHIPPING
+                </p>
+                
+                <button onclick="navigateToSection('shop')" 
+                        class="bg-[#ff00ff] hover:bg-[#ffff00] hover:text-black text-black px-12 py-6 text-2xl tracking-widest border-4 border-black transition-all">
+                    ENTER THE VOID →
+                </button>
+            </div>
+            
+            <div class="psychedelic-placeholder aspect-square text-5xl">
+              
+            </div>
+        </div>
+    </header>
+
+    <!-- Shop -->
+    <section id="shop" class="max-w-screen-2xl mx-auto px-8 py-16">
+        <h2 class="text-6xl text-center mb-12 tracking-widest neon-text">THE COLLECTION</h2>
+        
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <!-- JS populated -->
+        </div>
+    </section>
+
+    <!-- Stories -->
+    <section id="stories" class="bg-[#111] py-16 border-t-4 border-b-4 border-[#ff00ff]">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="border-4 border-[#00ffff] p-8 text-center psychedelic-placeholder" style="animation-duration: 4s;">
+                    <div class="text-6xl mb-4">🌀</div>
+                    <h3 class="text-3xl text-black"></h3>
+                </div>
+                <div class="border-4 border-[#ff00ff] p-8 text-center psychedelic-placeholder" style="animation-duration: 3.5s;">
+                    <div class="text-6xl mb-4"></div>
+                    <h3 class="text-3xl text-black">COSMIC FINDS</h3>
+                </div>
+                <div class="border-4 border-[#ffff00] p-8 text-center psychedelic-placeholder" style="animation-duration: 5s;">
+                    <div class="text-6xl mb-4">✨</div>
+                    <h3 class="text-3xl text-black">FAST SHIP</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="max-w-screen-2xl mx-auto px-8 py-20">
+        <div class="grid md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-5">
+                <div class="psychedelic-placeholder aspect-square text-6xl">
+                    YOUR<br>PHOTO<br>HERE
+                </div>
+            </div>
+            <div class="md:col-span-7 space-y-6">
+                <h2 class="text-6xl neon-text tracking-widest">WELCOME TO THE SHOW</h2>
+                <p class="text-2xl text-[#00ffff]">
+                    clothing comes alive here.<br><br>
+                    Every piece is handpicked and ready for its next journey.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t-4 border-[#ff00ff] py-12 text-center text-[#00ffff]">
+        <p class="text-xl">© 2026 NOVA'S PLANET • ALL RIGHTS RESERVED • PURE PSYCHEDELIC VIBES</p>
+    </footer>
+
+    <!-- Product Modal -->
+    <div id="product-modal" onclick="if(event.target===this)hideModal()" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[9999]">
+        <div onclick="event.stopImmediatePropagation()" class="bg-[#111] border-4 border-[#00ffff] max-w-4xl w-full mx-4 rounded-none p-8">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div id="modal-image" class="aspect-square"></div>
+                <div>
+                    <div id="modal-category" class="uppercase text-[#ffff00] text-xl"></div>
+                    <h2 id="modal-name" class="text-5xl neon-text mt-2"></h2>
+                    <div id="modal-price" class="text-4xl text-[#00ffff] mt-4"></div>
+                    <div id="modal-description" class="text-[#00ff9f] text-xl mt-8 leading-relaxed"></div>
+                    
+                    <button onclick="addCurrentToCart()" 
+                            class="mt-12 w-full bg-[#ff00ff] hover:bg-[#ffff00] hover:text-black py-8 text-3xl border-4 border-black tracking-widest">
+                        ADD TO THE TRIP →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart -->
+    <div id="cart-sidebar" onclick="if(event.target===this)toggleCart()" class="hidden fixed inset-0 bg-black/80 z-[10000] flex justify-end">
+        <div onclick="event.stopImmediatePropagation()" class="bg-[#111] w-full max-w-md h-full border-l-4 border-[#ff00ff] flex flex-col">
+            <div class="p-8 border-b border-[#00ffff] flex justify-between text-3xl">
+                <span class="neon-text">YOUR STASH</span>
+                <button onclick="toggleCart()" class="text-[#ffff00]">×</button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 p-8 overflow-auto space-y-8"></div>
+            
+            <div class="p-8 border-t border-[#00ffff]">
+                <div class="flex justify-between text-3xl mb-8">
+                    <span>TOTAL</span>
+                    <span id="cart-subtotal" class="text-[#ffff00]"></span>
+                </div>
+                <button onclick="checkout()" class="w-full py-8 bg-[#ffff00] text-black text-3xl tracking-widest border-4 border-black hover:bg-[#ff00ff] hover:text-white">
+                    BLAST OFF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let products = [
+            { id: 1, name: "Weathered 501 black wrangle jeans", price: 50, category: "DENIM", description: "Perfect fade. Size 31. Good for afternoon strolls or digging ditches for your enemies.", image: null },
+            { id: 2, name: "OVERSIZED CASHMERE", price: 85, category: "KNITS", description: "Soft like a cloud, made with Syrian Tears.", image: null },
+            { id: 3, name: "LEATHER MOTO JACKET", price: 300, category: "OUTERWEAR", description: "Rebel Against The System With Style or Just Larp In Comfort.", image: null },
+            { id: 4, name: "EMERALD SILK SHIRT", price: 150, category: "TOPS", description: "Silk? Did someone say SILK?!! Dress in style for the summer months and be comfortable in Vietnamese Silk.", image: null }
+        ]
+
+        let cart = []
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid')
+            grid.innerHTML = ''
+            products.forEach(p => {
+                const card = document.createElement('div')
+                card.className = 'product-card p-4 cursor-pointer'
+                card.innerHTML = `
+                    <div class="psychedelic-placeholder aspect-square text-3xl">
+                        ${p.category}
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-[#ffff00]">${p.category}</div>
+                        <div class="text-2xl">${p.name}</div>
+                        <div class="text-[#00ffff] text-3xl">$${p.price}</div>
+                    </div>
+                `
+                card.onclick = () => showProductModal(p)
+                grid.appendChild(card)
+            })
+        }
+
+        let currentProduct = null
+        function showProductModal(product) {
+            currentProduct = product
+            document.getElementById('modal-image').innerHTML = `
+                <div class="psychedelic-placeholder h-full text-5xl">
+                    ${product.category}<br>TRIP
+                </div>
+            `
+            document.getElementById('modal-category').textContent = product.category
+            document.getElementById('modal-name').textContent = product.name
+            document.getElementById('modal-price').innerHTML = `$${product.price}`
+            document.getElementById('modal-description').textContent = product.description
+            document.getElementById('product-modal').classList.remove('hidden')
+            document.getElementById('product-modal').classList.add('flex')
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('product-modal')
+            modal.classList.add('hidden')
+            modal.classList.remove('flex')
+        }
+
+        function addCurrentToCart() {
+            if (currentProduct) {
+                cart.push({...currentProduct})
+                updateCartCount()
+                hideModal()
+            }
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cart.length
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar')
+            if (sidebar.classList.contains('hidden')) {
+                renderCart()
+                sidebar.classList.remove('hidden')
+                sidebar.classList.add('flex')
+            } else {
+                sidebar.classList.add('hidden')
+                sidebar.classList.remove('flex')
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items')
+            container.innerHTML = ''
+            let total = 0
+            cart.forEach((item, i) => {
+                total += item.price
+                const row = document.createElement('div')
+                row.className = 'flex gap-4 border-b border-[#00ffff] pb-6'
+                row.innerHTML = `
+                    <div class="w-20 h-20 psychedelic-placeholder text-xs">IMG</div>
+                    <div class="flex-1">
+                        <div class="text-[#ffff00]">${item.name}</div>
+                        <div class="text-[#00ffff]">$${item.price}</div>
+                        <button onclick="removeFromCart(${i}); event.stopImmediatePropagation()" class="text-red-400 text-sm mt-3">REMOVE</button>
+                    </div>
+                `
+                container.appendChild(row)
+            })
+            document.getElementById('cart-subtotal').innerHTML = `$${total}`
+        }
+
+        function removeFromCart(i) {
+            cart.splice(i, 1)
+            updateCartCount()
+            renderCart()
+        }
+
+        function checkout() {
+            if (cart.length === 0) return
+            alert(" THANK YOU FOR VISITING NOVA'S PLANET!\n\nDemo mode activated.")
+            cart = []
+            updateCartCount()
+            toggleCart()
+        }
+
+        function toggleSearch() {
+            const q = prompt("SEARCH THE VOID:")
+            if (q) alert(`🔮 SEARCHING FOR "${q}"...`)
+        }
+
+        function navigateToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' })
+        }
+
+        window.onload = () => {
+            renderProducts()
+            updateCartCount()
+        }
+    </script>
+</body>
+</html>
